@@ -20,5 +20,36 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
 export default function Page({ params }: { params: { slug: string } }) {
   const p = products.find((p) => p.slug === params.slug);
   if (!p) notFound();
-  return <ProductDetail key={p.id} product={p} />;
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: p.name,
+    description: p.description,
+    image: p.images.map((img) => `https://khelshop.in${img}`),
+    brand: { "@type": "Brand", name: "Khelshop" },
+    offers: {
+      "@type": "Offer",
+      url: `https://khelshop.in/product/${p.slug}`,
+      priceCurrency: "INR",
+      price: p.price,
+      availability:
+        p.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: p.rating,
+      reviewCount: p.reviewCount,
+    },
+  };
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <ProductDetail key={p.id} product={p} />
+    </>
+  );
 }
