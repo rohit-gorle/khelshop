@@ -27,16 +27,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     description: p.description,
     image: p.images.map((img) => `https://khelshop.in${img}`),
     brand: { "@type": "Brand", name: "Khelshop" },
-    offers: {
-      "@type": "Offer",
-      url: `https://khelshop.in/product/${p.slug}`,
-      priceCurrency: "INR",
-      price: p.price,
-      availability:
-        p.stock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-    },
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: p.rating,

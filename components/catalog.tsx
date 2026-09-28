@@ -21,7 +21,6 @@ import {
   colorClass,
   categoryLabel,
 } from "@/data/products";
-import { money } from "@/lib/utils";
 import { useStore } from "./store";
 import { ProductCard, ProductRow, Stepper } from "./common";
 import { Button } from "./ui/button";
@@ -37,7 +36,6 @@ export function Shop() {
   const [category, setCategory] = useState(params.get("category") || "all"),
     [size, setSize] = useState("all"),
     [color, setColor] = useState("all"),
-    [price, setPrice] = useState(7000),
     [stock, setStock] = useState(false),
     [sort, setSort] = useState("featured"),
     [query, setQuery] = useState(""),
@@ -57,26 +55,20 @@ export function Shop() {
         (category === "all" || p.category === category) &&
         (size === "all" || p.sizes.includes(size)) &&
         (color === "all" || p.colors.includes(color)) &&
-        p.price <= price &&
         (!stock || p.stock > 0),
     );
     return result.sort((a, b) =>
-      sort === "low"
-        ? a.price - b.price
-        : sort === "high"
-          ? b.price - a.price
-          : sort === "hype"
-            ? b.reviewCount - a.reviewCount
-            : sort === "new"
-              ? Number(b.tags.includes("new")) - Number(a.tags.includes("new"))
-              : 0,
+      sort === "hype"
+        ? b.reviewCount - a.reviewCount
+        : sort === "new"
+          ? Number(b.tags.includes("new")) - Number(a.tags.includes("new"))
+          : 0,
     );
-  }, [query, category, size, color, price, stock, sort]);
+  }, [query, category, size, color, stock, sort]);
   const reset = () => {
     setCategory("all");
     setSize("all");
     setColor("all");
-    setPrice(7000);
     setStock(false);
     setQuery("");
   };
@@ -125,18 +117,6 @@ export function Shop() {
             {c === "all" ? "All colours" : c}
           </label>
         ))}
-      </div>
-      <div className="filter-group">
-        <label htmlFor="price-range">Up to {money(price)}</label>
-        <input
-          id="price-range"
-          type="range"
-          min="500"
-          max="7000"
-          step="100"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-        />
       </div>
       <label className="checkbox-label">
         <input
@@ -204,8 +184,6 @@ export function Shop() {
           >
             <option value="featured">Featured</option>
             <option value="new">New arrivals</option>
-            <option value="low">Price: low to high</option>
-            <option value="high">Price: high to low</option>
             <option value="hype">Most hyped</option>
           </select>
         </label>
@@ -360,9 +338,8 @@ export function ProductDetail({ product: p }: { product: Product }) {
             <small>({p.reviewCount} sample reviews)</small>
           </a>
           <div className="detail-price">
-            {money(p.price)}{" "}
-            {p.compareAtPrice && <del>{money(p.compareAtPrice)}</del>}
-            <small>Inclusive of taxes</small>
+            Coming soon
+            <small>Final pricing to be announced</small>
           </div>
           <p className="description">{p.description}</p>
           {p.holes && (
@@ -374,11 +351,6 @@ export function ProductDetail({ product: p }: { product: Product }) {
                 {p.colors.length === 1 ? "Light green" : "2 colour options"}
               </span>
             </div>
-          )}
-          {p.previewPrice && (
-            <p className="preview-price-note">
-              Preview price · pack quantity and final pricing to be confirmed.
-            </p>
           )}
           <div className="variant">
             <span>
@@ -545,7 +517,7 @@ export function ProductDetail({ product: p }: { product: Product }) {
       )}
       <div className="mobile-buy">
         <span>
-          {money(p.price)}
+          Coming soon
           <small>
             {size} / {color}
           </small>

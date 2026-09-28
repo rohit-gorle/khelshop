@@ -13,7 +13,6 @@ import {
   colorClass,
   categoryLabel,
 } from "@/data/products";
-import { money } from "@/lib/utils";
 export function Reveal({
   children,
   className = "",
@@ -69,10 +68,7 @@ export function ProductCard({ product: p }: { product: Product }) {
       <Link href={`/product/${p.slug}`}>
         <h3>{p.name}</h3>
       </Link>
-      <p className="product-price">
-        {money(p.price)}{" "}
-        {p.compareAtPrice && <del>{money(p.compareAtPrice)}</del>}
-      </p>
+      <p className="product-price">Coming soon</p>
       <div className="swatch-row">
         {p.colors.map((c) => (
           <span key={c} title={c} className={`swatch ${colorClass(c)}`} />
